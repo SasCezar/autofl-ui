@@ -11,7 +11,7 @@ if 'annotations' not in st.session_state:
     st.stop()
 
 annot: pd.DataFrame = st.session_state['annotations']
-
+taxonomy: pd.DataFrame = st.session_state['taxonomy']
 df = number_uannanotated(annot)
 
 st.markdown("# File Level Stats")
@@ -50,7 +50,7 @@ with st.container():
     st.markdown("## File Labels")
     file_labels_df = annot.reset_index()
     file_labels_df['label'] = [np.argmax(x) for x in file_labels_df['distribution']]
-    file_labels_df['label'] = file_labels_df['label'].astype(str)
+    file_labels_df['label'] = [taxonomy[str(x)] for x in file_labels_df['label']]
     file_labels_df['file'] = file_labels_df['index'].apply(lambda x: x.split('/')[-1])
     file_labels_df = file_labels_df.drop(columns=['distribution', 'labels'], axis=1)
     with chart_container(file_labels_df):

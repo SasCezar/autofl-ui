@@ -10,6 +10,7 @@ if 'annotations' not in st.session_state:
     st.stop()
 
 annot: pd.DataFrame = st.session_state['annotations']
+taxonomy: pd.DataFrame = st.session_state['taxonomy']
 
 st.markdown("# Package Level Stats")
 
@@ -21,7 +22,7 @@ with st.container():
     default = min(len(parents) + 1, 10)
     depth = st.slider('Depth', 1, len(parents) + 1, default)
     levels = [px.Constant("Project")] + parents
-    package_df['Label'] = package_df['Label'].astype(str)
+    package_df['Label'] = [taxonomy[str(x)] for x in package_df['Label']]
 
     with chart_container(package_df.drop(parents, axis=1)):
         fig = px.treemap(package_df, path=levels, color='Label', values='Count', maxdepth=depth,

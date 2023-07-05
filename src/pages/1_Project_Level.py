@@ -26,7 +26,7 @@ with st.container():
     res = top_labels(annot)
     default = min(len(res), 10)
     top = st.slider('Show top', 1, len(res), default)
-    df = pd.DataFrame({'Label': [get_random_string(7) for x in range(len(res))], 'Probability': res})
+    df = pd.DataFrame({'Label': [st.session_state['taxonomy'][str(x)] for x in range(len(res))], 'Probability': res})
     df = df.sort_values('Probability', ascending=False)
 
     with chart_container(df):

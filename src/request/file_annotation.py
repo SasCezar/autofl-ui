@@ -19,4 +19,5 @@ def annotate_file(project_name: str, remote: str, languages: List[str]):
     annotations_df = pd.DataFrame.from_dict(res['versions'][0]['files_annotation']).transpose()
     package_map = res['versions'][0]['files_packages']
     annotations_df['package'] = [package_map[x] for x in annotations_df.index]
-    return annotations_df
+    taxonomy = res['taxonomy']
+    return annotations_df, taxonomy
