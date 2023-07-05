@@ -1,7 +1,11 @@
+import random
+import string
+
 import pandas as pd
 import streamlit as st
 import plotly.express as px
-import altair as alt
+from streamlit_extras.chart_container import chart_container
+
 from analysis.project import top_labels
 
 if 'annotations' not in st.session_state:
@@ -10,25 +14,27 @@ if 'annotations' not in st.session_state:
 
 annot: pd.DataFrame = st.session_state['annotations']
 
-res = top_labels(annot)
-default = min(len(res), 10)
-top = st.slider('Show top', 1, len(res), default)
-df = pd.DataFrame({'label': [str(x) for x in range(len(res))], 'prob': res})
-df = df.sort_values('prob', ascending=False)
-df = df.head(top)
 
-fig = px.bar(df, x="prob", y="label", color="label", title="Project level labels (avg)")
-st.plotly_chart(fig, theme="streamlit")
+def get_random_string(length):
+    result_str = ''.join(random.choice(string.ascii_letters) for i in range(length))
+    return result_str
 
-# chart = (
-#     alt.Chart(df)
-#     .mark_bar()
-#     .encode(
-#         x=alt.X("prob", type="quantitative", title=""),
-#         y=alt.Y("label", type="nominal", title=""),
-#         color=alt.Color("label", type="nominal", title=""),
-#         order=alt.Order("prob", sort="descending"),
-#     )
-# )
-#
-# st.altair_chart(chart, use_container_width=True)
+
+st.markdown("# Project Level Stats")
+with st.container():
+    st.markdown("## Top Labels")
+    res = top_labels(annot)
+    default = min(len(res), 10)
+    top = st.slider('Show top', 1, len(res), default)
+    df = pd.DataFrame({'Label': [get_random_string(7) for x in range(len(res))], 'Probability': res})
+    df = df.sort_values('Probability', ascending=False)
+
+    with chart_container(df):
+        plot_df = df.head(top)
+        fig = px.bar(plot_df, x="Probability", y="Label", color="Label", title="Aggregation: Avg of Files Labels",
+                     hover_name="Label", hover_data={'Label': False, 'Probability': ':.6f'})
+        st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+with st.container():
+    st.markdown("## Historical Changes")
+    st.markdown("### TODO")
