@@ -28,6 +28,4 @@ with st.container():
         fig = px.treemap(package_df, path=levels, color='Label', values='Count', maxdepth=depth,
                          hover_name="Package", hover_data=dict(Label=True, Count=True))
         fig.update_layout(height=1000)
-
-        #fig.update_traces(hovertemplate='%{Package}<br>Label= %{Label}<br>Count= %{Count}<extra></extra>')
         st.plotly_chart(fig, theme="streamlit", use_container_width=True, height=1000)

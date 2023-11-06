@@ -49,10 +49,8 @@ with st.container():
 with st.container():
     st.markdown("## File Labels")
     file_labels_df = annot.reset_index()
-    file_labels_df['label'] = [np.argmax(x) for x in file_labels_df['distribution']]
-    file_labels_df['label'] = [taxonomy[str(x)] for x in file_labels_df['label']]
-    file_labels_df['file'] = file_labels_df['index'].apply(lambda x: x.split('/')[-1])
-    file_labels_df = file_labels_df.drop(columns=['distribution', 'labels'], axis=1)
+    file_labels_df['file'] = file_labels_df['path'].apply(lambda x: x.split('/')[-1])
+    file_labels_df = file_labels_df.drop(columns=['distribution'], axis=1)
     with chart_container(file_labels_df):
         fig = px.treemap(file_labels_df, path=[px.Constant("Project"), 'package', 'file'], color='label')
         fig.update_layout(height=1000)

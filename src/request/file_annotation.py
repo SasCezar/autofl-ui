@@ -1,8 +1,13 @@
 from typing import List
 
+import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
+
+
+def get_label(distribution, taxonomy):
+    return taxonomy[str(np.argmax(distribution))]
 
 
 @st.cache_data(show_spinner=False)
@@ -16,8 +21,20 @@ def annotate_file(project_name: str, remote: str, languages: List[str]):
 
     res = requests.post(url, json=analysis)
     res = res.json()['result']
-    annotations_df = pd.DataFrame.from_dict(res['versions'][0]['files_annotation']).transpose()
-    package_map = {file.path:file.package for file in res['versions'][0]['files'].values()}
-    annotations_df['package'] = [package_map[x] for x in annotations_df.index]
     taxonomy = res['taxonomy']
+    print(taxonomy)
+    entries = []
+    files = res['versions'][0]['files']
+    for file_name in files:
+        file = files[file_name]
+        entries.append({
+            "path": file["path"],
+            "package": file["package"],
+            "distribution": file["annotation"]["distribution"],
+            "unannotated": file["annotation"]["unannotated"],
+            "label": get_label(file["annotation"]["distribution"], taxonomy)
+        })
+
+    annotations_df = pd.DataFrame(entries)
+
     return annotations_df, taxonomy
