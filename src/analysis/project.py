@@ -9,8 +9,3 @@ def top_labels(df: DataFrame):
     annotations = np.array(df['distribution'].to_list())
     res = annotations.mean(axis=0)
     return res
-
-
-@st.cache_data(show_spinner=False)
-def percentage_composition(df: DataFrame):
-    pass

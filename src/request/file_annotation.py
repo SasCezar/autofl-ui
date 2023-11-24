@@ -22,7 +22,6 @@ def annotate_file(project_name: str, remote: str, languages: List[str]):
     res = requests.post(url, json=analysis)
     res = res.json()['result']
     taxonomy = res['taxonomy']
-    print(taxonomy)
     entries = []
     files = res['versions'][0]['files']
     for file_name in files:

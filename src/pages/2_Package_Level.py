@@ -14,13 +14,14 @@ taxonomy: pd.DataFrame = st.session_state['taxonomy']
 
 st.markdown("# Package Level Stats")
 
-package_df = package_labels(annot)
-
 with st.container():
     st.markdown("## Package Labels")
+    top = st.slider('Only Top Labels', 1, len(taxonomy) + 1, 10)
+    package_df = package_labels(annot, top)
     parents = [x for x in package_df.columns if 'Parent_' in x]
     default = min(len(parents) + 1, 10)
     depth = st.slider('Depth', 1, len(parents) + 1, default)
+
     levels = [px.Constant("Project")] + parents
     package_df['Label'] = [taxonomy[str(x)] for x in package_df['Label']]
 
