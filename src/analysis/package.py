@@ -7,7 +7,7 @@ from analysis.project import top_labels
 
 
 def argmax_top(x, top):
-    top_pos = np.argsort(x)
+    top_pos = np.argsort(x)[::-1]
     for t in top_pos:
         if t in top:
             return t
@@ -17,6 +17,7 @@ def argmax_top(x, top):
 @st.cache_data(show_spinner=False)
 def package_labels(df: DataFrame, top=10):
     top_proj_labels = np.argsort(top_labels(df))[-top:]
+    df_count = df.groupby('package')['package'].count().reset_index(name='Count')
     df_count = df.groupby('package')['package'].count().reset_index(name='Count')
     df = df.groupby('package')['distribution'].apply(lambda x: np.mean(np.array(x.tolist()), axis=0)).reset_index()
     # df['label'] = [np.argmax(x) for x in df['distribution']]
@@ -34,6 +35,6 @@ def package_labels(df: DataFrame, top=10):
     df = pd.merge(df, pd.DataFrame(packages).add_prefix('parent_'), on=df.index)
     df = df.rename(columns={'key_0': 'Package'})
     df.drop(columns=['distribution'], axis=1)
-    df.loc[df['Package'] == '.', 'Count'] = df.loc[df['Package'] == '.', 'Count'] / 4
+    df.loc[df['Package'] == '.', 'Count'] = int(df.loc[df['Package'] == '.', 'Count'] / 4)
     df.columns = [x.title() for x in df.columns]
     return df

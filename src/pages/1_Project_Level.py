@@ -22,7 +22,7 @@ def get_random_string(length):
 
 st.markdown("# Project Level Stats")
 with st.container():
-    st.markdown("## Top Labels")
+    #st.markdown("## Top Labels")
     res = top_labels(annot)
     default = min(len(res), 10)
     top = st.slider('Show top', 1, len(res), default)
@@ -33,6 +33,7 @@ with st.container():
         plot_df = df.head(top)
         fig = px.bar(plot_df, x="Probability", y="Label", color="Label", title="Aggregation: Avg of Files Labels",
                      hover_name="Label", hover_data={'Label': False, 'Probability': ':.6f'})
+        fig.update_layout(showlegend=False)
         st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 with st.container():

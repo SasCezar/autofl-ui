@@ -53,5 +53,5 @@ with st.container():
     file_labels_df = file_labels_df.drop(columns=['distribution'], axis=1)
     with chart_container(file_labels_df):
         fig = px.treemap(file_labels_df, path=[px.Constant("Project"), 'package', 'file'], color='label')
-        fig.update_layout(height=1000)
+        fig.update_layout(height=1000, font=dict(size=20))
         st.plotly_chart(fig, theme="streamlit", use_container_width=True, height=1000)

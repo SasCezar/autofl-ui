@@ -16,17 +16,23 @@ st.markdown("# Package Level Stats")
 
 with st.container():
     st.markdown("## Package Labels")
-    top = st.slider('Only Top Labels', 1, len(taxonomy) + 1, 10)
+    top = st.slider('Only Top Labels', 1, len(taxonomy) + 1, 20)
     package_df = package_labels(annot, top)
     parents = [x for x in package_df.columns if 'Parent_' in x]
     default = min(len(parents) + 1, 10)
-    depth = st.slider('Depth', 1, len(parents) + 1, default)
+    depth = len(parents) + 1 #st.slider('Depth', 1, len(parents) + 1, default)
 
     levels = [px.Constant("Project")] + parents
     package_df['Label'] = [taxonomy[str(x)] for x in package_df['Label']]
-
+    print(package_df)
     with chart_container(package_df.drop(parents, axis=1)):
         fig = px.treemap(package_df, path=levels, color='Label', values='Count', maxdepth=depth,
                          hover_name="Package", hover_data=dict(Label=True, Count=True))
-        fig.update_layout(height=1000)
+        fig.update_layout(height=1000, font=dict(size=20))
         st.plotly_chart(fig, theme="streamlit", use_container_width=True, height=1000)
+
+    # with chart_container(package_df.drop(parents, axis=1)):
+    #     fig = px.sunburst(package_df, path=levels, color='Label', values='Count', maxdepth=depth,
+    #                       hover_name="Package", hover_data=dict(Label=True, Count=True))
+    #     fig.update_layout(height=1000)
+    #     st.plotly_chart(fig, theme="streamlit", use_container_width=True, height=1000)
