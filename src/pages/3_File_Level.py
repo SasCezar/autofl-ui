@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 import streamlit as st
 import plotly.express as px
@@ -26,14 +25,6 @@ with st.container():
                                marginal="box")
             fig.update_layout(xaxis_title="JSD",
                                yaxis_title="Count")
-            #                   font=dict(size=20),
-            #                   yaxis=dict(
-            #                       tickfont=dict(size=20)),
-            #                   xaxis=dict(
-            #                       tickfont=dict(size=20)),
-            #                   legend=dict(font=dict(size=20)),
-            #                   hoverlabel=dict(font_size=20)
-            #                   )
 
             st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 

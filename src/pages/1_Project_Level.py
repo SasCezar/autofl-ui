@@ -22,7 +22,6 @@ def get_random_string(length):
 
 st.markdown("# Project Level Stats")
 with st.container():
-    #st.markdown("## Top Labels")
     res = top_labels(annot)
     default = min(len(res), 10)
     top = st.slider('Show top', 1, len(res), default)

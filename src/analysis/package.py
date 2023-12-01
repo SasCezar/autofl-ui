@@ -18,7 +18,6 @@ def argmax_top(x, top):
 def package_labels(df: DataFrame, top=10):
     top_proj_labels = np.argsort(top_labels(df))[-top:]
     df_count = df.groupby('package')['package'].count().reset_index(name='Count')
-    df_count = df.groupby('package')['package'].count().reset_index(name='Count')
     df = df.groupby('package')['distribution'].apply(lambda x: np.mean(np.array(x.tolist()), axis=0)).reset_index()
     # df['label'] = [np.argmax(x) for x in df['distribution']]
     df['label'] = [argmax_top(x, top_proj_labels) for x in df['distribution']]
