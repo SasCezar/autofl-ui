@@ -5,11 +5,11 @@ from streamlit_extras.chart_container import chart_container
 
 from analysis.file import number_uannanotated, avg_jsd
 
-if 'annotations' not in st.session_state:
+if 'file_annot' not in st.session_state:
     st.error('No labels found. Analyze a project first', icon="🚨")
     st.stop()
 
-annot: pd.DataFrame = st.session_state['annotations']
+annot: pd.DataFrame = st.session_state['file_annot']
 taxonomy: pd.DataFrame = st.session_state['taxonomy']
 df = number_uannanotated(annot)
 

@@ -3,9 +3,6 @@ import pandas as pd
 import streamlit as st
 from pandas import DataFrame
 
-from analysis.project import top_labels
-
-
 def argmax_top(x, top):
     top_pos = np.argsort(x)[::-1]
     for t in top_pos:
@@ -15,8 +12,8 @@ def argmax_top(x, top):
 
 
 @st.cache_data(show_spinner=False)
-def package_labels(df: DataFrame, top=10):
-    top_proj_labels = np.argsort(top_labels(df))[-top:]
+def package_labels(df: DataFrame, project_label, top=10):
+    top_proj_labels = np.argsort(project_label)[-top:]
     df_count = df.groupby('package')['package'].count().reset_index(name='Count')
     df = df.groupby('package')['distribution'].apply(lambda x: np.mean(np.array(x.tolist()), axis=0)).reset_index()
     # df['label'] = [np.argmax(x) for x in df['distribution']]

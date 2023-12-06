@@ -1,6 +1,11 @@
 # autofl-ui
+UI module for [AutoFL](https://github.com/SasCezar/AutoFL).
 
 ## UI Showcase
+
+The UI is a web application that allows the user to select a project and see the results of the analysis.
+
+We showcase the UI using the [Pumpernickel](https://github.com/mickleness/pumpernickel).
 
 ### Main Screen
 

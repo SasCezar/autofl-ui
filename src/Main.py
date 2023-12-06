@@ -2,10 +2,10 @@ from typing import List
 
 import streamlit as st
 
-from request.file_annotation import annotate_file
+from request.annotation import annotate
 
 st.set_page_config(
-    page_title="Analysis",
+    page_title="AutoFL - Analysis",
     page_icon="👋",
     layout="wide"
 )
@@ -14,8 +14,11 @@ st.set_page_config(
 def run_file_annotation(project_name: str, remote: str, languages: List[str]):
     if not project_name:
         return
-    annotations, taxonomy = annotate_file(project_name, remote, languages)
-    st.session_state['annotations'] = annotations
+    file_annot, package_annot, project_annot, taxonomy = annotate(project_name, remote, languages)
+
+    st.session_state['file_annot'] = file_annot
+    st.session_state['package_annot'] = package_annot
+    st.session_state['project_annot'] = project_annot
     st.session_state['taxonomy'] = taxonomy
 
 

@@ -11,7 +11,7 @@ def get_label(distribution, taxonomy):
 
 
 @st.cache_data(show_spinner=False)
-def annotate_file(project_name: str, remote: str, languages: List[str]):
+def annotate(project_name: str, remote: str, languages: List[str]):
     url = 'http://auto-fl:8000/label/files'
     analysis = {
         "name": project_name,  # "Waikato|weka-3.8",
@@ -22,11 +22,11 @@ def annotate_file(project_name: str, remote: str, languages: List[str]):
     res = requests.post(url, json=analysis)
     res = res.json()['result']
     taxonomy = res['taxonomy']
-    entries = []
+    file_entries = []
     files = res['versions'][0]['files']
     for file_name in files:
         file = files[file_name]
-        entries.append({
+        file_entries.append({
             "path": file["path"],
             "package": file["package"],
             "distribution": file["annotation"]["distribution"],
@@ -34,6 +34,16 @@ def annotate_file(project_name: str, remote: str, languages: List[str]):
             "label": get_label(file["annotation"]["distribution"], taxonomy)
         })
 
-    annotations_df = pd.DataFrame(entries)
+    file_annot = pd.DataFrame(file_entries)
+    package_annot = []
+    packages = res['versions'][0]['package_annotation']
+    for package in packages:
+        package_annot.append({
+            "package": package,
+            "distribution": packages[package],
+            "label": get_label(packages[package], taxonomy)
+        })
 
-    return annotations_df, taxonomy
+    project_annot = res['project_annotation'].popitem()[1]
+
+    return file_annot, package_annot, project_annot, taxonomy

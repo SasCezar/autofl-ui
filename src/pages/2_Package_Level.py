@@ -5,11 +5,12 @@ from streamlit_extras.chart_container import chart_container
 
 from analysis.package import package_labels
 
-if 'annotations' not in st.session_state:
+if 'file_annot' not in st.session_state:
     st.error('No labels found. Analyze a project first', icon="🚨")
     st.stop()
 
-annot: pd.DataFrame = st.session_state['annotations']
+proj_annot = st.session_state['project_annot']
+annot: pd.DataFrame = st.session_state['file_annot']
 taxonomy: pd.DataFrame = st.session_state['taxonomy']
 
 st.markdown("# Package Level Stats")
@@ -17,7 +18,7 @@ st.markdown("# Package Level Stats")
 with st.container():
     st.markdown("## Package Labels")
     top = st.slider('Only Top Labels', 1, len(taxonomy) + 1, 20)
-    package_df = package_labels(annot, top)
+    package_df = package_labels(annot, proj_annot, top)
     parents = [x for x in package_df.columns if 'Parent_' in x]
     default = min(len(parents) + 1, 10)
     depth = len(parents) + 1 #st.slider('Depth', 1, len(parents) + 1, default)
