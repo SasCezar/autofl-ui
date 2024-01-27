@@ -27,9 +27,9 @@ with st.container():
     with st.form("my_form"):
         st.markdown("### Select a Project to Analyze")
 
-        project_name = st.text_input('Project Name')
+        project_name = st.text_input('Project Name',  type="default", value="")
 
-        remote = st.text_input('Remote URL')
+        remote = st.text_input('Remote URL',  type="default", value="")
         languages = st.multiselect('What Languages to Analyze', ['java', 'python', 'cpp', 'c_sharp', 'c'], ['java'])
         res = st.form_submit_button(type='primary', use_container_width=True)
 
